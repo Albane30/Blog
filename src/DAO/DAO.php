@@ -7,11 +7,6 @@ use Exception;
 abstract class DAO
 {
 
-        //Nos constantes
-        const DB_HOST = 'mysql:host=localhost;dbname=Blog;charset=utf8';
-        const DB_USER = 'root';
-        const DB_PASS = '';
-
         private $connection;
 
     private function checkConnection()
@@ -28,7 +23,7 @@ abstract class DAO
     {
          //Tentative de connexion à la base de données (self fait référence à la classe)
          try{
-            $this->connection = new PDO(self::DB_HOST, self::DB_USER, self::DB_PASS);
+            $this->connection = new PDO(DB_HOST, DB_USER, DB_PASS);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             //On renvoie la connexion
@@ -47,12 +42,10 @@ abstract class DAO
         if($parameters)
         {
             $result = $this->checkConnection()->prepare($sql);
-            $result->setFetchMode(PDO::FETCH_CLASS, static::class);
             $result->execute($parameters);
             return $result;
         }
         $result = $this->checkConnection()->query($sql);
-        $result->setFetchMode(PDO::FETCH_CLASS, static::class);
         return $result;
     }
 }
